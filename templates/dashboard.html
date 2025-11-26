@@ -54,13 +54,13 @@
             <div class="card">
                 <h4>IAM Users</h4>
                 <p>View all IAM users in your account</p>
-                <p class="info-text">Coming in next tasks</p>
+                <a href="{{ url_for('iam.users') }}" class="btn btn-primary">View Users</a>
             </div>
             
             <div class="card">
                 <h4>IAM Roles</h4>
                 <p>View all IAM roles in your account</p>
-                <p class="info-text">Coming in next tasks</p>
+                <a href="{{ url_for('iam.roles') }}" class="btn btn-primary">View Roles</a>
             </div>
         </div>
     </div>

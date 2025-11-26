@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}IAM Roles - AWS IAM Viewer{% endblock %}
+
+{% block content %}
+<div class="iam-list">
+    <h2>IAM Roles</h2>
+    
+    {% if paginated.total_items == 0 %}
+        <div class="empty-state">
+            <p>No IAM roles found in this AWS account.</p>
+            <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    {% else %}
+        <div class="list-header">
+            <p>Showing {{ paginated.items|length }} of {{ paginated.total_items }} roles (Page {{ paginated.page }} of {{ paginated.total_pages }})</p>
+        </div>
+        
+        <table class="iam-table">
+            <thead>
+                <tr>
+                    <th>Role Name</th>
+                    <th>Role ID</th>
+                    <th>ARN</th>
+                    <th>Created</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for role in paginated.items %}
+                <tr>
+                    <td><strong>{{ role.role_name }}</strong></td>
+                    <td><code>{{ role.role_id }}</code></td>
+                    <td><code class="arn">{{ role.arn }}</code></td>
+                    <td>{{ role.create_date.strftime('%Y-%m-%d %H:%M') if role.create_date else 'N/A' }}</td>
+                    <td>{{ role.description if role.description else 'No description' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if paginated.total_pages > 1 %}
+        <div class="pagination">
+            {% if paginated.has_prev %}
+                <a href="{{ url_for('iam.roles', page=paginated.prev_page) }}" class="btn btn-secondary">← Previous</a>
+            {% else %}
+                <span class="btn btn-secondary disabled">← Previous</span>
+            {% endif %}
+            
+            <span class="page-info">Page {{ paginated.page }} of {{ paginated.total_pages }}</span>
+            
+            {% if paginated.has_next %}
+                <a href="{{ url_for('iam.roles', page=paginated.next_page) }}" class="btn btn-secondary">Next →</a>
+            {% else %}
+                <span class="btn btn-secondary disabled">Next →</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="actions">
+            <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

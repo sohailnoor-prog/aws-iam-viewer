@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}IAM Users - AWS IAM Viewer{% endblock %}
+
+{% block content %}
+<div class="iam-list">
+    <h2>IAM Users</h2>
+    
+    {% if paginated.total_items == 0 %}
+        <div class="empty-state">
+            <p>No IAM users found in this AWS account.</p>
+            <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    {% else %}
+        <div class="list-header">
+            <p>Showing {{ paginated.items|length }} of {{ paginated.total_items }} users (Page {{ paginated.page }} of {{ paginated.total_pages }})</p>
+        </div>
+        
+        <table class="iam-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>User ID</th>
+                    <th>ARN</th>
+                    <th>Created</th>
+                    <th>Password Last Used</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in paginated.items %}
+                <tr>
+                    <td><strong>{{ user.username }}</strong></td>
+                    <td><code>{{ user.user_id }}</code></td>
+                    <td><code class="arn">{{ user.arn }}</code></td>
+                    <td>{{ user.create_date.strftime('%Y-%m-%d %H:%M') if user.create_date else 'N/A' }}</td>
+                    <td>{{ user.password_last_used.strftime('%Y-%m-%d %H:%M') if user.password_last_used else 'Never' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        {% if paginated.total_pages > 1 %}
+        <div class="pagination">
+            {% if paginated.has_prev %}
+                <a href="{{ url_for('iam.users', page=paginated.prev_page) }}" class="btn btn-secondary">← Previous</a>
+            {% else %}
+                <span class="btn btn-secondary disabled">← Previous</span>
+            {% endif %}
+            
+            <span class="page-info">Page {{ paginated.page }} of {{ paginated.total_pages }}</span>
+            
+            {% if paginated.has_next %}
+                <a href="{{ url_for('iam.users', page=paginated.next_page) }}" class="btn btn-secondary">Next →</a>
+            {% else %}
+                <span class="btn btn-secondary disabled">Next →</span>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        <div class="actions">
+            <a href="{{ url_for('auth.dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
