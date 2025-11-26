@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - AWS IAM Viewer{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h2>Welcome, {{ session.get('email', username) }}!</h2>
+    
+    <div class="dashboard-section">
+        <h3>AWS Connection</h3>
+        <p>Connect to your AWS account to view IAM resources.</p>
+        
+        <div class="connection-status">
+            <span class="status-badge status-disconnected">Not Connected</span>
+            <p>AWS connection functionality will be available in the next task.</p>
+            <p class="info-text">Coming soon: Connect with AWS credentials to view IAM users, roles, and permissions.</p>
+        </div>
+    </div>
+    
+    <div class="dashboard-section">
+        <h3>Next Steps</h3>
+        <div class="resource-cards">
+            <div class="card">
+                <h4>✓ Authentication Complete</h4>
+                <p>You are successfully logged in with AWS Cognito</p>
+            </div>
+            
+            <div class="card">
+                <h4>Coming Next</h4>
+                <p>AWS credential management and IAM resource viewing</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
