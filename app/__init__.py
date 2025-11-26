@@ -26,7 +26,9 @@ def create_app(config_name='default'):
     
     # Register blueprints
     from app.routes.auth import auth_bp
+    from app.routes.aws import aws_bp
     app.register_blueprint(auth_bp)
+    app.register_blueprint(aws_bp)
     
     # Root route redirects to login
     @app.route('/')

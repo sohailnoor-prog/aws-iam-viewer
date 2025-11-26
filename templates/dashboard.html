@@ -11,25 +11,69 @@
         <p>Connect to your AWS account to view IAM resources.</p>
         
         <div class="connection-status">
-            <span class="status-badge status-disconnected">Not Connected</span>
-            <p>AWS connection functionality will be available in the next task.</p>
-            <p class="info-text">Coming soon: Connect with AWS credentials to view IAM users, roles, and permissions.</p>
+            {% if session.get('aws_connected') %}
+                <span class="status-badge status-connected">Connected</span>
+                <p>Region: {{ session.get('aws_region', 'us-west-2') }}</p>
+                <a href="{{ url_for('aws.disconnect') }}" class="btn btn-secondary">Disconnect</a>
+            {% else %}
+                <span class="status-badge status-disconnected">Not Connected</span>
+                <p>Please provide your AWS credentials to continue.</p>
+                <button class="btn btn-primary" onclick="showConnectForm()">Connect to AWS</button>
+            {% endif %}
+        </div>
+        
+        <div id="connect-form" class="connect-form" style="display: none;">
+            <h4>Enter AWS Credentials</h4>
+            <form method="POST" action="{{ url_for('aws.connect') }}">
+                <div class="form-group">
+                    <label for="access_key">AWS Access Key ID</label>
+                    <input type="text" id="access_key" name="access_key" required placeholder="AKIAIOSFODNN7EXAMPLE">
+                </div>
+                
+                <div class="form-group">
+                    <label for="secret_key">AWS Secret Access Key</label>
+                    <input type="password" id="secret_key" name="secret_key" required placeholder="Enter your secret key">
+                </div>
+                
+                <div class="form-group">
+                    <label for="region">AWS Region</label>
+                    <input type="text" id="region" name="region" value="us-west-2" required>
+                    <small>Default: us-west-2</small>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Connect</button>
+                <button type="button" class="btn btn-secondary" onclick="hideConnectForm()">Cancel</button>
+            </form>
         </div>
     </div>
     
+    {% if session.get('aws_connected') %}
     <div class="dashboard-section">
-        <h3>Next Steps</h3>
+        <h3>IAM Resources</h3>
         <div class="resource-cards">
             <div class="card">
-                <h4>✓ Authentication Complete</h4>
-                <p>You are successfully logged in with AWS Cognito</p>
+                <h4>IAM Users</h4>
+                <p>View all IAM users in your account</p>
+                <p class="info-text">Coming in next tasks</p>
             </div>
             
             <div class="card">
-                <h4>Coming Next</h4>
-                <p>AWS credential management and IAM resource viewing</p>
+                <h4>IAM Roles</h4>
+                <p>View all IAM roles in your account</p>
+                <p class="info-text">Coming in next tasks</p>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
+
+<script>
+function showConnectForm() {
+    document.getElementById('connect-form').style.display = 'block';
+}
+
+function hideConnectForm() {
+    document.getElementById('connect-form').style.display = 'none';
+}
+</script>
 {% endblock %}
